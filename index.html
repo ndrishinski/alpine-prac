@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  </head>
+  <body>
+    <div x-data="magic">
+      <button @click="toggle('increment')">Increment</button>
+      <button x-on:click="toggle('decrement')">Decrement</button>
+
+      <span x-text="count"></span>
+      <h1 x-show="shouldShow" x-transition.duration.500ms>SHOWING HERE</h1>
+      <div id="test"></div>
+    </div>
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("magic", () => ({
+          count: 0,
+          get shouldShow() {
+            return this.count > 1;
+          },
+          toggle(arg) {
+            if (arg === "increment") {
+              this.count++;
+            } else {
+              this.count--;
+            }
+          },
+        }));
+
+        document.querySelector("#test").innerHTML = `
+          <h1>Testing DOM manipulation!</h1>
+          <h2 x-text="count"></h2>
+        `;
+      });
+    </script>
+  </body>
+</html>
