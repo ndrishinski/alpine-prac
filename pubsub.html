@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test PubSub</title>
+  </head>
+  <body>
+    <h1>Test here</h1>
+    <button>Click Me!</button>
+    <script>
+      let subscribers = {};
+      // Define or import the subscribe function here
+      function subscribe(eventName, callback) {
+        if (subscribers[eventName] === undefined) {
+          subscribers[eventName] = [];
+        }
+        // Placeholder implementation
+        console.log(`Subscribed to ${eventName}`);
+        // Simulate an event for demonstration
+        subscribers[eventName] = [...subscribers[eventName], callback];
+
+        console.log("List of subscribers ", subscribers);
+      }
+
+      function publish(eventName, data) {
+        if (subscribers[eventName]) {
+          subscribers[eventName].forEach((i) => i(data));
+        }
+      }
+
+      class NickTest {
+        constructor() {
+          this.createListener();
+        }
+
+        publishSub() {
+          publish("nick_test_subscribe", { nick: "test test test" });
+        }
+
+        subscribeSub() {
+          subscribe("nick_test_subscribe", (event) => {
+            console.log("event was published, here it is: ", event.nick);
+          });
+        }
+
+        createListener() {
+          // Corrected the event listener attachment
+          document
+            .querySelector("button")
+            .addEventListener("click", () => this.publishSub());
+
+          document
+            .querySelector("h1")
+            .addEventListener("click", () => this.subscribeSub());
+        }
+      }
+
+      new NickTest();
+    </script>
+  </body>
+</html>
