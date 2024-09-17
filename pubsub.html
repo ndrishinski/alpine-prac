@@ -23,6 +23,7 @@
 
       function publish(eventName, data) {
         if (subscribers[eventName]) {
+          console.log("second list:", subscribers[eventName]);
           subscribers[eventName].forEach((i) => i(data));
         }
       }
@@ -33,7 +34,8 @@
         }
 
         publishSub() {
-          publish("nick_test_subscribe", { nick: "test test test" });
+          let date = new Date();
+          publish("nick_test_subscribe", { nick: date });
         }
 
         subscribeSub() {

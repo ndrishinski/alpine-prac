@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Super Smash Bros Ultimate Countdown Page</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Lora|Merriweather"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        background-color: black;
+      }
+
+      header {
+        text-align: center;
+      }
+
+      .logo {
+        display: inline-block;
+        width: 24rem;
+        height: auto;
+      }
+      .logo > img {
+        max-width: 100%;
+        max-height: auto;
+      }
+
+      @font-face {
+        font-family: myFirstFont;
+        src: url(http://domain.com/fonts/font.ttf);
+      }
+
+      header > table {
+        display: inline-block;
+      }
+      .cNums {
+        color: white;
+        font-family: "Merriweather", sans-serif;
+        font-size: 3rem;
+      }
+      .timeDesc {
+        color: white;
+        font-family: "Lora", serif;
+        font-size: 1rem;
+        text-align: center;
+      }
+
+      .twinDisp {
+        display: flex;
+        clear: left;
+        padding-top: 1rem;
+      }
+      .twinDisp > div {
+        width: 50%;
+        border: 1px solid white;
+        display: table-cell;
+        text-align: center;
+      }
+      .twinDisp img {
+        max-width: 100%;
+        max-height: 500px;
+      }
+      .twinDisp > .charDesc {
+        color: white;
+      }
+
+      /* reference https://css-tricks.com/books/volume-i/infinite-scrolling-background-image/ */
+
+      .container {
+        overflow: hidden;
+        margin-top: 1.5rem;
+      }
+
+      .sliding-background {
+        background: url("https://res.cloudinary.com/djkzfcjjh/image/upload/v1541398588/samples/smash/NintendoSwitch_SuperSmashBrosUltimate_Artwork_02.png")
+          repeat-x;
+        height: 1080px;
+        width: 5830px;
+        animation: slide 60s linear infinite;
+      }
+
+      @keyframes slide {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(-1943px, 0, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header style="display: flex; flex-direction: row">
+      <div
+        style="
+          flex: 1;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+        "
+      >
+        <div class="logo">
+          <img
+            src="https://res.cloudinary.com/djkzfcjjh/image/upload/v1541393888/samples/smash/NintendoSwitch_SuperSmashBrosUltimate_Logo_02.png"
+          />
+        </div>
+        <br />
+        <table>
+          <tr>
+            <td id="days" class="cNums"></td>
+            <td class="cNums">:</td>
+            <td id="hours" class="cNums"></td>
+            <td class="cNums">:</td>
+            <td id="minutes" class="cNums"></td>
+            <td class="cNums">:</td>
+            <td id="seconds" class="cNums"></td>
+          </tr>
+          <tr>
+            <td class="timeDesc">Days</td>
+            <td></td>
+            <td class="timeDesc">Hours</td>
+            <td></td>
+            <td class="timeDesc">Minutes</td>
+            <td></td>
+            <td class="timeDesc">Seconds</td>
+          </tr>
+        </table>
+      </div>
+      <div
+        style="
+          flex: 1;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+        "
+        class="quote-section"
+      >
+        <p
+          id="quote"
+          style="
+            color: #fff;
+            font-size: 28px;
+            margin-right: 30px;
+            line-height: 40px;
+          "
+        >
+          "I think the artistry is in having an insight into what one sees
+          <br />
+          around them. Generally putting things together in a new way no one
+          <br />
+          else has before and finding a way to express that to other people who
+          <br />
+          don't have that insight" - Steve Jobs
+        </p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="sliding-background"></div>
+    </div>
+    <script>
+      const Countdown = (function () {
+        class Countdown {
+          constructor(remaining) {
+            this.refresh(remaining);
+          }
+
+          refresh(remaining) {
+            this.daysDiff = Math.floor(remaining / 1000 / 60 / 60 / 24);
+            this.hoursDiff = Math.floor((remaining / 1000 / 60 / 60) % 24);
+            this.minDiff = Math.floor((remaining / 1000 / 60) % 60);
+            this.secDiff = Math.floor((remaining / 1000) % 60);
+
+            this.daysDiff =
+              this.daysDiff < 10 ? "0" + this.daysDiff : this.daysDiff;
+            this.hoursDiff =
+              this.hoursDiff < 10 ? "0" + this.hoursDiff : this.hoursDiff;
+            this.minDiff =
+              this.minDiff < 10 ? "0" + this.minDiff : this.minDiff;
+            this.secDiff =
+              this.secDiff < 10 ? "0" + this.secDiff : this.secDiff;
+          }
+        }
+
+        return Countdown;
+      })();
+
+      function updateTimerDisp(daysTxt, hoursTxt, minutesTxt, secondsTxt) {
+        daysTxt.innerHTML = this.daysDiff;
+        hoursTxt.innerHTML = this.hoursDiff;
+        minutesTxt.innerHTML = this.minDiff;
+        secondsTxt.innerHTML = this.secDiff;
+      }
+
+      var daysTxt = document.getElementById("days");
+      var hoursTxt = document.getElementById("hours");
+      var minutesTxt = document.getElementById("minutes");
+      var secondsTxt = document.getElementById("seconds");
+      var startDate = new Date();
+      var endDate = new Date();
+      endDate.setMinutes(endDate.getMinutes() + 2);
+      var dateDiff = endDate - startDate;
+      var timeLeft = new Countdown(dateDiff);
+
+      updateTimerDisp.apply(timeLeft, [
+        daysTxt,
+        hoursTxt,
+        minutesTxt,
+        secondsTxt,
+      ]);
+
+      setInterval(() => {
+        dateDiff -= 1000;
+        timeLeft.refresh(dateDiff);
+        updateTimerDisp.apply(timeLeft, [
+          daysTxt,
+          hoursTxt,
+          minutesTxt,
+          secondsTxt,
+        ]);
+      }, 1000);
+
+      const charArtPrefix =
+        "https://res.cloudinary.com/djkzfcjjh/image/upload/v1541046148/samples/smash/NintendoSwitch_SuperSmashBrosUltimate_CharacterArt_";
+      const charArtPostfix = ".png";
+
+      var charImg = document.getElementById("randChar");
+      var charIdArray = [
+        "04",
+        "05",
+        "06",
+        "08",
+        "10",
+        "11",
+        "12",
+        "17",
+        "19",
+        "14",
+        "20",
+        "21",
+        "25",
+        "27",
+        "23",
+        "22",
+        "29",
+        "31",
+        "36",
+        "33",
+        "37",
+        "39",
+        "38",
+        "44",
+        "42",
+        "41",
+        "45",
+        "47",
+        "47",
+        "50",
+        "51",
+        "52",
+        "55",
+        "58",
+        "54",
+        "60",
+        "56",
+        "65",
+        "66",
+        "63",
+        "64",
+        "62",
+        "68",
+      ];
+      var currentId = charIdArray[0];
+
+      charImg.src = charArtPrefix.concat(`${currentId}${charArtPostfix}`);
+
+      setInterval(() => {
+        var availArr = charIdArray.filter((e) => e !== currentId);
+        var randIndex = Math.floor(availArr.length * Math.random());
+        currentId = availArr[randIndex];
+        charImg.src = charArtPrefix.concat(`${currentId}${charArtPostfix}`);
+      }, 5000);
+    </script>
+  </body>
+</html>
